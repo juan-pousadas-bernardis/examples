@@ -1,7 +1,28 @@
 # Examples
 
 Repositorio de aprendizaje
+# Definir lista de usuarios con su departamento
+$usuarios = @(
+    @{Nombre="Pedro Alvarez"; User="palvarez"; OU="Recursos Humanos"; Grupo="GRP-RRHH"},
+    @{Nombre="Maria Fernandez"; User="mfernandez"; OU="Recursos Humanos"; Grupo="GRP-RRHH"},
+    @{Nombre="Juan Medina"; User="jmedina"; OU="Sistemas"; Grupo="GRP-SISTEMAS"},
+    @{Nombre="Lucia Vargas"; User="lvargas"; OU="Sistemas"; Grupo="GRP-SISTEMAS"},
+    @{Nombre="Roberto Castro"; User="rcastro"; OU="Sistemas"; Grupo="GRP-SISTEMAS"},
+    @{Nombre="Natalia Rojas"; User="nrojas"; OU="Comercial"; Grupo="GRP-COMERCIAL"},
+    @{Nombre="Gabriel Ortiz"; User="gortiz"; OU="Comercial"; Grupo="GRP-COMERCIAL"},
+    @{Nombre="Valeria Mora"; User="vmora"; OU="Recursos Humanos"; Grupo="GRP-RRHH"},
+    @{Nombre="Andres Soto"; User="asoto"; OU="Comercial"; Grupo="GRP-COMERCIAL"},
+    @{Nombre="Carolina Reyes"; User="creyes"; OU="Sistemas"; Grupo="GRP-SISTEMAS"}
+)
 
+$password = ConvertTo-SecureString "Usuario@123" -AsPlainText -Force
+
+foreach ($u in $usuarios) {
+    $path = "OU=$($u.OU),DC=empresa,DC=local"
+    New-ADUser -Name $u.Nombre -SamAccountName $u.User -UserPrincipalName "$($u.User)@empresa.local" -Path $path -AccountPassword $password -Enabled $true
+    Add-ADGroupMember -Identity $u.Grupo -Members $u.User
+    Write-Host "Creado: $($u.Nombre) en $($u.OU)" -ForegroundColor Green
+}
 ## GIT
 
 * `Wiki` https://es.wikipedia.org/wiki/Git
